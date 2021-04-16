@@ -12,7 +12,10 @@
 
         </div>
       </div>
-      <div class="col-md-8"></div>
+      <div class="col-md-8"><i class="fas fa-align-justify"></i> Category
+      <a class="btn btn-success btn-sm float-right" href=""><i class="fas fa-plus"></i> Create Category</a>
+      <hr>
+      </div>
     </div>
   </div>
 @endsection
