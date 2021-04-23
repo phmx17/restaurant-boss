@@ -33,6 +33,7 @@
             <div class="alert alert-danger">{{ $message }}</div>
           @enderror
         </div>
+        <a href="/management/category" class="btn btn-secondary float-right">Cancel</a>
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
   
