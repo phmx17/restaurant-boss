@@ -24,3 +24,5 @@ Route::get('/management', function() {
 });
 
 Route::resource('management/category', 'Management\CategoryController'); // path then folder where the resource controller lives
+
+Route::resource('management/menu', 'Management\MenuController'); // path then folder where the resource controller lives

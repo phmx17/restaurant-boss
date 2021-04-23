@@ -3,16 +3,7 @@
 @section('content')
   <div class="container">
     <div class="row justify-content-center">
-      <!-- left side menu -->
-      <div class="col-md-4">
-        <div class="list-group">
-          <a class="list-group-item list-group-item-action" href="/management/category"><i class="fas fa-align-justify"></i> Create a Category</a>
-          <a class="list-group-item list-group-item-action" href=""><i class="fas fa-hamburger"></i> Menu</a>
-          <a class="list-group-item list-group-item-action" href=""><i class="fas fa-chair"></i> Table</a>
-          <a class="list-group-item list-group-item-action" href=""><i class="fas fa-users-cog"></i> User</a>
-
-        </div>
-      </div>
+      @include('management.inc.sidebar')
       <!-- create category button -->
       <div class="col-md-8"><i class="fas fa-align-justify"></i> Create a Category
       <a class="btn btn-success btn-sm float-right" href="/management/category/create"><i class="fas fa-plus"></i> Create</a>
@@ -42,10 +33,11 @@
             <td scope="row">{{ $category->name }}</td>
             <td scope="row"><a href="/management/category/{{ $category->id }}/edit" class="btn btn-warning">Edit</a></td>
             <td scope="row">
+              <!-- must make into a form -->
               <form action="/management/category/{{ $category->id }}" method="POST">
                 @method('DELETE')
                 @csrf
-                <input type="hidden" value="{{ $category->name }}" name="name" >
+                <input type="hidden" value="{{ $category->name }}" name="name"><!-- this is for flash message -->
                 <button class="btn btn-danger">Delete</button>
               </form>
           </tr>
