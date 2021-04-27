@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Management;
 
+use App\Menu;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-      return view('management.menu');
+      $menus = Menu::all();
+      return view('management.menu')->with('menus', $menus);
     }
 
     /**
@@ -37,7 +39,31 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      
+      $validated = $request->validate([
+        'name' => ['bail','required', 'unique:menus', 'max:140'],
+        'price' => ['required', 'numeric'],
+        'category_id' => ['required', 'numeric']
+      ]);
+      // storing image
+      $imageName = 'noimage.png';   // default if no image
+        if ($request->image){
+          $request->validate([
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5000'
+          ]);
+          $imageName = date('mdYHis').uniqid() . '.' . $request->image->extension();  // create unique image name
+          $request->image->move(public_path('menu_images'), $imageName);  // move image to public-folder for storage
+        };
+
+      $menu = new Menu();
+      $menu->name = $request->name;  
+      $menu->price = $request->price;
+      $menu->image = $imageName;
+      $menu->description = $request->description;
+      $menu->category_id = $request->category_id;
+      $menu->save();
+      $request->session()->flash('status', $request->name . ' was saved successfully');
+      return redirect('/management/menu');
     }
 
     /**
@@ -59,7 +85,9 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        //
+      $menu = Menu::find($id);
+      $categories = Category::all();
+      return view('management/editMenu')->with('menu', $menu)->with('categories', $categories); 
     }
 
     /**
