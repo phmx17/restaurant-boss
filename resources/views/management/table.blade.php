@@ -35,7 +35,7 @@
             <td>{{$table->status}}</td>
             <td><a href="/management/table/{{$table->id}}/edit" class="btn btn-warning">Edit</a></td>
             <td>
-              <form action="/management/table/" method="POST">
+              <form action="/management/table/{{$table->id}}" method="POST">
                 @csrf  
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger" />

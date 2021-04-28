@@ -66,7 +66,8 @@ class TableController extends Controller
      */
     public function edit($id)
     {
-        //
+      $table = Table::find($id);
+      return view('management.editTable')->with('table', $table);
     }
 
     /**
@@ -78,7 +79,14 @@ class TableController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $request->validate([
+        'name' => 'required|unique:tables|max:75'
+      ]);
+      $table = Table::find($id);
+      $table->name = $request->name;
+      $table->save();
+      $request->session()->flash('status', 'Table: ' . $table->name . ' has been updated');
+      return redirect('/management/table');
     }
 
     /**
@@ -89,6 +97,9 @@ class TableController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $table = Table::find($id);
+      Session()->flash('status', 'Table: ' . $table->name . ' was deleted successfully');
+      $table->delete();
+      return redirect('/management/table');
     }
 }
