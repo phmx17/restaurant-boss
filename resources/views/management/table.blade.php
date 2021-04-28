@@ -28,6 +28,22 @@
           </tr>
         </thead>
         <tbody>
+          @foreach($tables as $table)
+          <tr>
+            <td>{{$table->id}}</td>
+            <td>{{$table->name}}</td>
+            <td>{{$table->status}}</td>
+            <td><a href="/management/table/{{$table->id}}/edit" class="btn btn-warning">Edit</a></td>
+            <td>
+              <form action="/management/table/" method="POST">
+                @csrf  
+                @method('DELETE')
+                <input type="submit" value="Delete" class="btn btn-danger" />
+              </form>
+            </td>
+
+          </tr>
+          @endforeach
 
         </tbody>
       </table>
