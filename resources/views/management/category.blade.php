@@ -36,8 +36,7 @@
               <!-- must make into a form -->
               <form action="/management/category/{{ $category->id }}" method="POST">
                 @method('DELETE')
-                @csrf
-                <input type="hidden" value="{{ $category->name }}" name="name"><!-- this is for flash message -->
+                @csrf                
                 <button class="btn btn-danger">Delete</button>
               </form>
           </tr>
