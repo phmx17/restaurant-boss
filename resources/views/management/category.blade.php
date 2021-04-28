@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
       @include('management.inc.sidebar')
       <!-- create category button -->
-      <div class="col-md-8"><i class="fas fa-align-justify"></i> Create a Category
+      <div class="col-md-8"><i class="fas fa-align-justify"></i> Category
       <a class="btn btn-success btn-sm float-right" href="/management/category/create"><i class="fas fa-plus"></i> Create</a>
       <hr>
       <!-- success message -->

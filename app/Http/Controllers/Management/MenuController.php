@@ -150,4 +150,4 @@ class MenuController extends Controller
       $menu->delete();
       return redirect('/management/menu');
     }
-}
+} 

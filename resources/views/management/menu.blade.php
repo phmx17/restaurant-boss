@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
       @include('management.inc.sidebar')
       <!-- create category button -->
-      <div class="col-md-8"><i class="fas fa-hamburger"></i> Create a Menu
+      <div class="col-md-8"><i class="fas fa-hamburger"></i> Menu
       <a class="btn btn-success btn-sm float-right" href="/management/menu/create"><i class="fas fa-plus"></i> Create Menu</a>
       <hr>
       <!-- success message -->

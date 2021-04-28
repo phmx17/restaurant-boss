@@ -23,6 +23,6 @@ Route::get('/management', function() {
   return view('management.index');
 });
 
-Route::resource('management/category', 'Management\CategoryController'); // path then folder where the resource controller lives
-
-Route::resource('management/menu', 'Management\MenuController'); // path then folder where the resource controller lives
+Route::resource('management/category', 'Management\CategoryController'); // URI, then folder where the resource controller lives
+Route::resource('management/menu', 'Management\MenuController'); // URI, then folder where the resource controller lives
+Route::resource('management/table', 'Management\TableController'); // URI, then folder where the resource controller lives
