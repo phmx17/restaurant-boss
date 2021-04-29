@@ -38,7 +38,7 @@ class TableController extends Controller
     public function store(Request $request)
     {
       $request->validate([
-        'name' => 'required|unique:tables|max:55'
+        'name' => 'required|unique:tables|max:17'
       ]);
       $table = new Table();
       $table->name = $request->name;
@@ -80,7 +80,7 @@ class TableController extends Controller
     public function update(Request $request, $id)
     {
       $request->validate([
-        'name' => 'required|unique:tables|max:75'
+        'name' => 'required|unique:tables|max:17'
       ]);
       $table = Table::find($id);
       $table->name = $request->name;

@@ -25,13 +25,17 @@ Route::get('/management', function() {
   return view('management.index');
 });
 
+// Cashier routes
+Route::get('/cashier', function() {
+  return view('cashier.index');
+});
+Route::get('/cashier/getTables', 'Cashier\CashierController@getTables');
+
+
 // resource routes for Management
 Route::resource('management/category', 'Management\CategoryController'); // URI, then folder where the resource controller lives
 Route::resource('management/menu', 'Management\MenuController'); // URI, then folder where the resource controller lives
 Route::resource('management/table', 'Management\TableController'); // URI, then folder where the resource controller lives
 
-// Cashier routes
-Route::get('/cashier', function() {
-  return view('cashier.index');
-});
+
 
