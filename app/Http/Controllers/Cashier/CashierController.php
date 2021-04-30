@@ -23,7 +23,7 @@ class CashierController extends Controller
     foreach($tables as $table) {
       $html .= '<div class="col-md-2 mb-4">';
       $html .= 
-      '<button class="btn btn-primary btn-table" data-id="'.$table->id.'">
+      '<button class="btn btn-primary btn-table" data-id="'.$table->id.'" data-name="'.$table->name.'">
         <img class="img-fluid" width="100px" src="'.url('/images/chairs-table.svg').'" />
         <br>
         <span class="badge badge-success">'.$table->name.'</span>
@@ -36,6 +36,7 @@ class CashierController extends Controller
   public function getMenuByCategory($category_id) 
   {
     $menus = Menu::where('category_id', $category_id)->get();
+    // dd($menus);
     // create markup
     $html = '';
     foreach($menus as $menu) {
@@ -50,8 +51,7 @@ class CashierController extends Controller
         </a>
       </div>
       ';
-      return $html;
-
     }
+      return $html;    
   }
 }

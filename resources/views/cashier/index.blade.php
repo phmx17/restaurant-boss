@@ -6,6 +6,7 @@
   <div class="row justify-content-center">
     <div class="col-md-5">
       <button class="btn btn-primary btn-block" id="btn-show-tables">View All Tables</button>
+      <div id="selected-table"></div>
     </div>
     <div class="col-md-7">  
       <nav>
@@ -42,12 +43,20 @@
     });
     // load menus by category
     $('.nav-link').click(function() {
-      $.get('/cashier/getMenuByCategory/' + $(this).data('id'), function(data) {
+      $.get(`/cashier/getMenuByCategory/${$(this).data('id')}`, function(data) {
+        console.log(data)
         $('#list-menu').hide();
         $('#list-menu').html(data);
         $('#list-menu').fadeIn('slow');
-      })
-    })
+      });
+    });
+    // detect button table on click. 
+    $('#table-detail').on('click', '.btn-table', function() {
+       const selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
+       const selectedTableName = $(this).data('name');
+       $('#selected-table').html(`<br><h3>Table: ${selectedTableName}</h3><hr>`);
+      
+    } )
   });
 </script>
-@endsection
+@endsection 
