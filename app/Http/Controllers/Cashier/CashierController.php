@@ -54,4 +54,9 @@ class CashierController extends Controller
     } // .btn-menu is for targeting and not a bootstrap class
       return $html;    
   }
+
+  public function orderFood(Request $request)
+  {
+    return $request->menu_id;
+  }
 }

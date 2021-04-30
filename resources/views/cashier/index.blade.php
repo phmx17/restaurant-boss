@@ -6,7 +6,8 @@
   <div class="row justify-content-center">
     <div class="col-md-5">
       <button class="btn btn-primary btn-block" id="btn-show-tables">View All Tables</button>
-      <div id="selected-table"></div>
+      <div id="selected-table"></div><!-- container for table details -->
+      <div id="order-details"></div><!-- container for order details -->
     </div>
     <div class="col-md-7">  
       <nav>
@@ -44,7 +45,6 @@
     // load menus by category
     $('.nav-link').click(function() {
       $.get(`/cashier/getMenuByCategory/${$(this).data('id')}`, function(data) {
-        console.log(data)
         $('#list-menu').hide();
         $('#list-menu').html(data);
         $('#list-menu').fadeIn('slow');
@@ -65,7 +65,23 @@
       if(selectedTableId == '') {
         alert('you need to select a table first')
       } else {
-        alert('add menu item to table now')
+        const menu_id = $(this).data('id');
+        // make ajax request
+        $.ajax({
+          type: 'POST',
+          data: {
+            '_token': $('meta[name="csrf-token"').attr('content'),
+            'menu_id': menu_id,
+            'table_id': selectedTableId,
+            'table_name': selectedTableName,
+            'quantity': 1
+          },
+          url: '/cashier/orderFood',
+          success: function(data) {
+            $('#order-details').html(data)  // push data into container
+          }
+        })
+
       }
     })
 
