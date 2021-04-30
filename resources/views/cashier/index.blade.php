@@ -50,13 +50,25 @@
         $('#list-menu').fadeIn('slow');
       });
     });
+    let selectedTableId = ''
+    let selectedTableName = ''
     // detect button table on click. 
     $('#table-detail').on('click', '.btn-table', function() {
-       const selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
-       const selectedTableName = $(this).data('name');
-       $('#selected-table').html(`<br><h3>Table: ${selectedTableName}</h3><hr>`);
-      
-    } )
+       selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
+       selectedTableName = $(this).data('name');
+       $('#selected-table').html(`<br><h3>Table: ${selectedTableName}</h3><hr>`);      
+    })
+
+    // click on menu pic to display in table detail
+    $('#list-menu').on('click', '.btn-menu', function() {
+      // do not allow selection of menu item before a table is selected
+      if(selectedTableId == '') {
+        alert('you need to select a table first')
+      } else {
+        alert('add menu item to table now')
+      }
+    })
+
   });
 </script>
 @endsection 

@@ -42,7 +42,7 @@ class CashierController extends Controller
     foreach($menus as $menu) {
       $html .= '
       <div class="col-md-3 text-center">
-        <a class="btn btn-outline-secondary" data-id="'.$menu->id.'">
+        <a class="btn btn-outline-secondary btn-menu" data-id="'.$menu->id.'">
           <img class="img-fluid" src="'.url('/menu_images/'.$menu->image).'" />
           <br>
           '.$menu->name.'
@@ -51,7 +51,7 @@ class CashierController extends Controller
         </a>
       </div>
       ';
-    }
+    } // .btn-menu is for targeting and not a bootstrap class
       return $html;    
   }
 }
