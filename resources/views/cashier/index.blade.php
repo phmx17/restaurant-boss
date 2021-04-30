@@ -7,9 +7,20 @@
     <div class="col-md-5">
       <button class="btn btn-primary btn-block" id="btn-show-tables">View All Tables</button>
     </div>
-    <div class="col-md-7">      
-    </div>
-       
+    <div class="col-md-7">  
+      <nav>
+        <!-- create tablist -->
+        <div class="nav nav-tabs" id="nav-tab" role="tablist"><!-- role is for Aria -->
+          <!-- create nav tabs -->
+          @foreach($categories as $category)
+            <a class="nav-item nav-link" data-id="{{$category->id}}" data-toggle="tab">
+              {{$category->name}}
+            </a>
+          @endforeach
+        </div>
+      </nav>    
+      <div id="list-menu" class="row mt-2"></div><!-- container for list-menu -->
+    </div>       
   </div>
 </div>
 <script>
@@ -29,6 +40,14 @@
       $('#btn-show-tables').html('Show All Tables').removeClass('btn-danger').addClass('btn-primary');      
       }
     });
+    // load menus by category
+    $('.nav-link').click(function() {
+      $.get('/cashier/getMenuByCategory/' + $(this).data('id'), function(data) {
+        $('#list-menu').hide();
+        $('#list-menu').html(data);
+        $('#list-menu').fadeIn('slow');
+      })
+    })
   });
 </script>
 @endsection
