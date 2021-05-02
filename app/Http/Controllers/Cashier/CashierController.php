@@ -100,6 +100,19 @@ class CashierController extends Controller
     return $html; // call function for markup creation
   }
 
+  // controller for returning sale details to selected table
+  public function getSaleDetailsByTable($table_id)
+  {
+    $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+    $html = '';
+    if($sale) {
+      $sale_id = $sale->id;
+      $html .= $this->getSaleDetails($sale_id);
+    } else {
+      $html = 'No Sale found for current table';      
+    }
+    return $html;
+  }
   /**
    * create markup for sale details
    */

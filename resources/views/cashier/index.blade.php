@@ -58,11 +58,14 @@
     $('#table-detail').on('click', '.btn-table', function() {
        selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
        selectedTableName = $(this).data('name');
-       $('#selected-table').html(`<br><h3>Table: ${selectedTableName}</h3><hr>`);      
+       $('#selected-table').html(`<br><h3>Table: ${selectedTableName}</h3><hr>`); // populate #selected-table container
+       $.get(`/cashier/getSaleDetailsByTable/${selectedTableId}`, (data) => {
+        $('#order-details').html(data)  // push data into container
+       })      
     })
 
     // click on menu pic to display in table detail
-    $('#list-menu').on('click', '.btn-menu', function() {
+    $('#list-menu').on('click', '.btn-menu', function() { // .btn-menu was created in controller @getMenuByCategory
       // do not allow selection of menu item before a table is selected
       if(selectedTableId == '') {
         alert('you need to select a table first')
