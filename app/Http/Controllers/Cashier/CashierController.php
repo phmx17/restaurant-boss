@@ -145,19 +145,21 @@ class CashierController extends Controller
 
     // loop through sale details and create the table data
     foreach($saleDetails as $saleDetail) {
-      if($saleDetail->status == 'Not Confirmed') { 
-        $showBtnPayment = false;  // change in order to not display the payment button (until status has been confirmed show confirm button)
-      }
+
       $html .= '
       <tr>
         <td>'.$saleDetail->menu_id.'</td>
         <td>'.$saleDetail->menu_name.'</td>
         <td>'.$saleDetail->quantity.'</td>
         <td>'.$saleDetail->menu_price.'</td>
-        <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>
-        <td>'.$saleDetail->status.'</td>      
-      </tr>
-      ';
+        <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
+        if($saleDetail->status == 'Not Confirmed') { 
+          $showBtnPayment = false;  // change in order to not display the payment button (until status has been confirmed show confirm button)
+          $html .= '<td><a data-id="'.$saleDetail->id.'" class="btn btn-danger btn-delete-saleDetail"><i class="fas fa-trash-alt"></i></a></td>';
+        } else {
+          $html .= '<td><i class="fas fa-check-circle"></i></td>';
+        }
+      $html .= '</tr>';      
     }
     $html .= '</tbody></table></div>'; 
     
