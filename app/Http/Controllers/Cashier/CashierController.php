@@ -92,10 +92,51 @@ class CashierController extends Controller
     $saleDetail->menu_price = $menu->price;
     $saleDetail->quantity = $request->quantity;
     $saleDetail->save();
-    // update total price
+    // update total price in Sale
     $sale->total_price = $sale->total_price + ($request->quantity * $menu->price);
     $sale->save();
-    return $sale->total_price; // for testing only
+    
+    $html = $this->getSaleDetails($sale_id);
+    return $html; // call function for markup creation
+  }
 
+  /**
+   * create markup for sale details
+   */
+  private function getSaleDetails($sale_id)
+  {
+    // list all sales detail
+    $html = '<p>Sale ID: '.$sale_id.'</p>';
+    $saleDetails = SaleDetail::where('sale_id', $sale_id)->get(); // $sale_id is current (local) sale id, see above
+    // concat more markup
+    $html .= '<div class="table-responsive-md" style="overflow-y: scroll; height: 400px; border: 1px solid #343A40;">
+    <table class="table table-striped table-dark">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Menu</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>';
+
+    // loop through sale details and create the table data
+    foreach($saleDetails as $saleDetail) {
+      $html .= '
+      <tr>
+        <td>'.$saleDetail->menu_id.'</td>
+        <td>'.$saleDetail->menu_name.'</td>
+        <td>'.$saleDetail->quantity.'</td>
+        <td>'.$saleDetail->menu_price.'</td>
+        <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>
+        <td>'.$saleDetail->status.'</td>      
+      </tr>
+      ';
+    }
+    $html .= '</tbody></table></div>'; 
+    return $html;
   }
 }
