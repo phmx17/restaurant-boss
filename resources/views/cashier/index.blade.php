@@ -42,17 +42,19 @@
       $('#btn-show-tables').html('Show All Tables').removeClass('btn-danger').addClass('btn-primary');      
       }
     });
+
     // load menus by category
     $('.nav-link').click(function() {
       $.get(`/cashier/getMenuByCategory/${$(this).data('id')}`, function(data) {
         $('#list-menu').hide();
-        $('#list-menu').html(data);
+        $('#list-menu').html(data); // push data (menu id and image) into list-menu container (24)
         $('#list-menu').fadeIn('slow');
       });
     });
+
+    // detect button table on click. 
     let selectedTableId = ''
     let selectedTableName = ''
-    // detect button table on click. 
     $('#table-detail').on('click', '.btn-table', function() {
        selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
        selectedTableName = $(this).data('name');
@@ -81,10 +83,8 @@
             $('#order-details').html(data)  // push data into container
           }
         })
-
       }
     })
-
   });
 </script>
 @endsection 
