@@ -20,7 +20,7 @@ class CreateSaleDetailsTable extends Migration
             $table->string('menu_name');
             $table->decimal('menu_price');
             $table->integer('quantity');
-            $table->string('status')->default('noConfirm'); // 'confirm'; 'noConfirm'
+            $table->string('status')->default('Not Confirmed'); // 'Confirmed'; 'Not Confirmed'
             $table->timestamps();
         });
     }

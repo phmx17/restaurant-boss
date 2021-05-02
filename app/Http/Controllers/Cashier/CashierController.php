@@ -141,8 +141,13 @@ class CashierController extends Controller
     </thead>
     <tbody>';
 
+    $showBtnPayment = true; // flag for changing button from confirm to payment when all sale details are confirmed; default = true
+
     // loop through sale details and create the table data
     foreach($saleDetails as $saleDetail) {
+      if($saleDetail->status == 'Not Confirmed') { 
+        $showBtnPayment = false;  // change in order to not display the payment button (until status has been confirmed show confirm button)
+      }
       $html .= '
       <tr>
         <td>'.$saleDetail->menu_id.'</td>
@@ -155,6 +160,29 @@ class CashierController extends Controller
       ';
     }
     $html .= '</tbody></table></div>'; 
+    
+    $sale = Sale::find($sale_id);    
+    $html .= '<hr>';
+    $html .= '<h3>Total Amount: $ '.number_format($sale->total_price, 2).'</h3>'; // allow precision of 2 digits
+    
+    // change confirm button to payment button if flag is 'true' otherwise revert to 'confirm' button
+    if($showBtnPayment) {
+      $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment">Payment</button>'; 
+    } else {
+      $html .= '<button data-id="'.$sale_id.'" class="btn btn-warning btn-block btn-confirm-order">Confirm Order</button>'; 
+    }
+    // .btn-confirm-order is used for targeting in the index jQ script section
+    // data-id is for passing to jQ; access: $(this).data('id');
+    return $html;    
+  }
+
+  public function confirmOrderStatus(Request $request)
+  {
+    $sale_id = $request->sale_id;
+    $saleDetails = SaleDetail::where('sale_id', $sale_id)->update([ // update with an ass array
+      'status' => 'Confirmed'
+    ]);
+    $html = $this->getSaleDetails($sale_id);  // create sale details markup
     return $html;
   }
 }

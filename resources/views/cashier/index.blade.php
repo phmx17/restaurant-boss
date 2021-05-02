@@ -55,6 +55,7 @@
     // detect button table on click. 
     let selectedTableId = ''
     let selectedTableName = ''
+    let sale_id = ''
     $('#table-detail').on('click', '.btn-table', function() {
        selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
        selectedTableName = $(this).data('name');
@@ -88,6 +89,28 @@
         })
       }
     })
-  });
+    // confirming order via target of button; class markup was created in controller $html by getSaleDetails()
+    $('#order-details').on('click', '.btn-confirm-order', function() {  // do not use fat arrow '=>' since 'this' needs access
+       const saleId = $(this).data('id') // defined in controller markup: data-id="'.$sale_id.'"
+       $.ajax({
+         type: "POST",
+         data: {
+          '_token': $('meta[name="csrf-token"').attr('content'),
+          'sale_id': saleId,
+         },
+         url: '/cashier/confirmOrderStatus',
+         success: (data) => {
+          $('#order-details').html(data);  // html is returned from controller
+         }
+       })
+
+    })
+
+ 
+
+
+
+
+  }); // $(document).ready
 </script>
 @endsection 
