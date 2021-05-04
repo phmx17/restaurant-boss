@@ -173,7 +173,7 @@ class CashierController extends Controller
     
     // change confirm button to payment button if flag is 'true' otherwise revert to 'confirm' button
     if($showBtnPayment) {
-      $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment" data-totalAmount="'.$sale->total_price.'" data-toggle="modal" data-target="#exampleModal">Payment</button>'; 
+      $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment" data-totalAmount="'.$sale->total_price.'" data-toggle="modal" data-target="#exampleModal">Make Payment</button>'; 
     } else {
       $html .= '<button data-id="'.$sale_id.'" class="btn btn-warning btn-block btn-confirm-order">Confirm Order</button>'; 
     }

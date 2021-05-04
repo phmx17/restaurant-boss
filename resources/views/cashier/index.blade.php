@@ -32,23 +32,26 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Payment</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Make Payment</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- modal body -->
       <div class="modal-body">
-        <h3 class="totalAmount"></h3>    
+        <h3 class="totalAmount"></h3><!-- container -->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text">Received: $</span></div>
+          <input type="number" id="received-amount" class="form-control">
+        </div> 
+        <h3 class="changeAmount"></h3><!-- container -->
+      </div>       
       <!-- modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary btn-save-payment" disabled>Save Payment</button>
       </div>
     </div>
   </div>
 </div>
-
-
-
 
 <script>
   $(document).ready(function() {
@@ -146,11 +149,32 @@
         })  
       })
 
-      // user clicks on payment button
+      // user clicks on payment button (not in modal!)
       $('#order-details').on('click', '.btn-payment', function(){
         // const totalAmount = $(this).data('totalAmount');
         const totalAmount = $(this).attr('data-totalAmount')
-        $('.totalAmount').html(`Total Amount: ${totalAmount}`)
+        $('.totalAmount').html(`Total Amount: ${totalAmount}`)  // push into <h3> tag of modal payment window
+        // clear out received amount field
+        $('#received-amount').val('')
+        $('.changeAmount').html('')
+
+      })
+
+      // calculate change
+      $('#received-amount').keyup(function() {
+        const totalAmount = $('.btn-payment').attr('data-totalAmount') // get totalAmount from the button above using attr()
+        const receivedAmount = $(this).val()
+        let changeAmount = receivedAmount - totalAmount
+        changeAmount = changeAmount.toFixed(2)  // make sure to only display 2 decimal points
+        $('.changeAmount').html(`Total Change: ${changeAmount}`)   
+        
+        // enable modal payment button upon cash received
+        if(changeAmount >= 0) {
+          $('.btn-save-payment').prop('disabled', false);
+        } else {
+          $('.btn-save-payment').prop('disabled', true);
+
+        }
       })
 
  
