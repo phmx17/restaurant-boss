@@ -43,6 +43,13 @@
           <input type="number" id="received-amount" class="form-control">
         </div> 
         <h3 class="changeAmount"></h3><!-- container -->
+        <div class="form-group">
+          <label for="payment">Payment Type</label>
+          <select class="form-control" id="payment-type">
+            <option value="cash">Cash</option>
+            <option value="credit">Credit Card</option>
+          </select>
+        </div>
       </div>       
       <!-- modal footer -->
       <div class="modal-footer">
@@ -80,10 +87,12 @@
       });
     });
 
-    // detect button table on click. 
+    // Global vars
     let selectedTableId = ''
     let selectedTableName = ''
-    let sale_id = ''
+    let saleId = ''
+
+    // detect button table on click. 
     $('#table-detail').on('click', '.btn-table', function() {
        selectedTableId = $(this).data('id'); // $this refers to '.btn-table'
        selectedTableName = $(this).data('name');
@@ -117,6 +126,7 @@
         })
       }
     })
+
     // confirming order via target of button; class markup was created in controller $html by getSaleDetails()
     $('#order-details').on('click', '.btn-confirm-order', function() {  // do not use fat arrow '=>' since 'this' needs access
        const saleId = $(this).data('id') // defined in controller markup: data-id="'.$sale_id.'"
@@ -149,14 +159,16 @@
         })  
       })
 
-      // user clicks on payment button (not in modal!)
+      // user clicks on 'Make Payment' button (not in modal!)
       $('#order-details').on('click', '.btn-payment', function(){
         // const totalAmount = $(this).data('totalAmount');
         const totalAmount = $(this).attr('data-totalAmount')
         $('.totalAmount').html(`Total Amount: ${totalAmount}`)  // push into <h3> tag of modal payment window
-        // clear out received amount field
+        // clear out total and received fields
         $('#received-amount').val('')
         $('.changeAmount').html('')
+        // assign global saleId to be used later
+        saleId = $(this).data('id')
 
       })
 
@@ -175,6 +187,28 @@
           $('.btn-save-payment').prop('disabled', true);
 
         }
+      })
+
+      // save payment in modal
+      $('.btn-save-payment').click(function() {
+        const receivedAmount = $('#received-amount').val();
+        const paymentType = $('#payment-type').val();
+        // const saleId = $('.btn-payment').data('id') // this will not work!!
+        const sale_id = saleId  // assign to local from global which is activated on clicking 'Make Payment' button
+        // use ajax to send payment details
+        $.ajax({
+          type: 'POST',
+          data: {
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'sale_id': sale_id,
+            'received_amount': receivedAmount,
+            'payment_type': paymentType
+          },
+          url: '/cashier/savePayment',
+          success: (data) => {
+            window.location.href= data;
+          }
+        })
       })
 
  

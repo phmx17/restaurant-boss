@@ -32,7 +32,8 @@ Route::get('/cashier/getTables', 'Cashier\CashierController@getTables');
 Route::post('/cashier/orderFood', 'Cashier\CashierController@orderFood');
 Route::get('/cashier/getSaleDetailsByTable/{table_id}', 'Cashier\CashierController@getSaleDetailsByTable');
 Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
-Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail');
+Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
+Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
 
 
 

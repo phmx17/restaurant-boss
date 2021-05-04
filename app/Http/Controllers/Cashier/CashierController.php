@@ -222,4 +222,26 @@ class CashierController extends Controller
     }
     return $html;  
   }
-}
+
+  /**
+   * save payment details to Sale in database
+   */
+  public function savePayment(Request $request) 
+  {
+    $saleId = $request->sale_id;
+    $receivedAmount = $request->received_amount;
+    $paymentType = $request->payment_type;
+    // update Sale record in database
+    $sale = Sale::find($saleId)->first();    
+    $sale->total_received = $receivedAmount;
+    $sale->total_change = $receivedAmount - $sale->total_price;
+    $sale->payment_type = $paymentType;
+    $sale->sale_status = 'paid';
+    $sale->save();
+    // update table to be available for next guests
+    $table = Table::find($sale->table_id);
+    $table->status = 'available';
+    $table->save();
+    return '/cashier';
+  }
+  }
