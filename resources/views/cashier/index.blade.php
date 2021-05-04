@@ -25,6 +25,31 @@
     </div>       
   </div>
 </div>
+
+<!-- Bootstrap Modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Payment</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- modal body -->
+      <div class="modal-body">
+        <h3 class="totalAmount"></h3>    
+      <!-- modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script>
   $(document).ready(function() {
     // hide table by default
@@ -93,18 +118,40 @@
     $('#order-details').on('click', '.btn-confirm-order', function() {  // do not use fat arrow '=>' since 'this' needs access
        const saleId = $(this).data('id') // defined in controller markup: data-id="'.$sale_id.'"
        $.ajax({
-         type: "POST",
+         type: 'POST',
          data: {
-          '_token': $('meta[name="csrf-token"').attr('content'),
+          '_token': $('meta[name="csrf-token"]').attr('content'),
           'sale_id': saleId,
          },
          url: '/cashier/confirmOrderStatus',
          success: (data) => {
           $('#order-details').html(data);  // html is returned from controller
-         }
-       })
+          }
+       })      
+    })    
 
-    })
+    // delete sale details of menu item upon click of trash icon
+      $('#order-details').on('click', '.btn-delete-saleDetail', function() {        
+        const saleDetailId = $(this).data('id');  // .data() is data from an <a> tag <a data-id="'.$value.'"></a>
+        $.ajax({
+          type: 'POST',
+          data: {
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'saleDetail_id': saleDetailId
+          },
+          url: '/cashier/deleteSaleDetail',
+          success: (data) => {
+            $('#order-details').html(data);  // html is returned from controller
+          }
+        })  
+      })
+
+      // user clicks on payment button
+      $('#order-details').on('click', '.btn-payment', function(){
+        // const totalAmount = $(this).data('totalAmount');
+        const totalAmount = $(this).attr('data-totalAmount')
+        $('.totalAmount').html(`Total Amount: ${totalAmount}`)
+      })
 
  
 

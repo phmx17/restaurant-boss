@@ -41,11 +41,13 @@ class CashierController extends Controller
     return $html;
   }
 
+  /**
+   * display menu on the right column
+   */
   public function getMenuByCategory($category_id) 
   {
     $menus = Menu::where('category_id', $category_id)->get();
-    // dd($menus);
-
+    
     // create markup for #list-menu container 
     $html = '';
     foreach($menus as $menu) {
@@ -56,7 +58,7 @@ class CashierController extends Controller
           <br>
           '.$menu->name.'
           <br>
-          $'.number_format($menu->price).'
+          $'.number_format($menu->price, 2).'
         </a>
       </div>
       ';
@@ -155,8 +157,10 @@ class CashierController extends Controller
         <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
         if($saleDetail->status == 'Not Confirmed') { 
           $showBtnPayment = false;  // change in order to not display the payment button (until status has been confirmed show confirm button)
+          // make into a delete link - using trash icon and btn-delete-saledetail for targeting in index <script> and data-id
           $html .= '<td><a data-id="'.$saleDetail->id.'" class="btn btn-danger btn-delete-saleDetail"><i class="fas fa-trash-alt"></i></a></td>';
         } else {
+          // show check mark in a circle icon
           $html .= '<td><i class="fas fa-check-circle"></i></td>';
         }
       $html .= '</tr>';      
@@ -169,7 +173,7 @@ class CashierController extends Controller
     
     // change confirm button to payment button if flag is 'true' otherwise revert to 'confirm' button
     if($showBtnPayment) {
-      $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment">Payment</button>'; 
+      $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment" data-totalAmount="'.$sale->total_price.'" data-toggle="modal" data-target="#exampleModal">Payment</button>'; 
     } else {
       $html .= '<button data-id="'.$sale_id.'" class="btn btn-warning btn-block btn-confirm-order">Confirm Order</button>'; 
     }
@@ -178,6 +182,9 @@ class CashierController extends Controller
     return $html;    
   }
 
+  /**
+   * change status to confirmed in sale details
+   */
   public function confirmOrderStatus(Request $request)
   {
     $sale_id = $request->sale_id;
@@ -186,5 +193,33 @@ class CashierController extends Controller
     ]);
     $html = $this->getSaleDetails($sale_id);  // create sale details markup
     return $html;
+  }
+
+  /**
+   * delete sale detail of a trashed menu item from sale details
+   */
+  public function deleteSaleDetail(Request $request)
+  {
+    $saleDetail_id = $request->saleDetail_id;
+    $saleDetail = SaleDetail::find($saleDetail_id);
+    $sale_id = $saleDetail->sale_id;
+
+    // remove menu item price according to quantity
+    $menu_price = ($saleDetail->menu_price * $saleDetail->quantity);
+    $saleDetail->delete();
+
+    // locate the sale and update its total_price and save
+    $sale = Sale::find($sale_id);
+    $sale->total_price = $sale->total_price - $menu_price; 
+    $sale->save();
+
+    // collect updated sale details
+    $saleDetails = SaleDetail::where('sale_id', $sale_id)->first();
+    if($saleDetail) {
+      $html = $this->getSaleDetails($sale_id);  // creates markup for sale details container in view
+    } else {
+      $html .= 'There are no sale details for this table';
+    }
+    return $html;  
   }
 }
