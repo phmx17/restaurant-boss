@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Restaurant Boss - Receipt - SaleID: {{$sale->id}}</title>
+  <link rel="stylesheet" href="{{asset('/css/receipt.css')}}" media="all">
+  <link rel="stylesheet" href="{{asset('css/no-print.css')}}" media="print">
 </head>
 <body>
   <div id="wrapper">
@@ -66,16 +68,17 @@
       <p>OK, thank you bye bye.</p>
     </div>
     <div id="buttons">
+      <!-- back button -->
       <a href="/cashier">
         <button class="btn btn-back">
           Back to Cashier
         </button>
       </a>
-      
-        <button class="btn btn-print" type="button" onclick="window.print();
-          return false;" >
-          Print
-        </button>
+    <!-- activate print -->        
+    <button class="btn btn-print" type="button" onclick="window.print();
+      return false;" >
+      Print
+    </button>
       
     </div>
 
