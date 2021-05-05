@@ -37,12 +37,11 @@ Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); //
 // sales receipt
 Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale
 
-
-
 // resource routes for Management
 Route::resource('management/category', 'Management\CategoryController'); // URI, then folder where the resource controller lives
 Route::resource('management/menu', 'Management\MenuController'); // URI, then folder where the resource controller lives
 Route::resource('management/table', 'Management\TableController'); // URI, then folder where the resource controller lives
 
-
+// report
+Route::get('/report', 'Report\ReportController@index');
 
