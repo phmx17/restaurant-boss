@@ -34,6 +34,8 @@ Route::get('/cashier/getSaleDetailsByTable/{table_id}', 'Cashier\CashierControll
 Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
 Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
 Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
+// sales receipt
+Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale
 
 
 

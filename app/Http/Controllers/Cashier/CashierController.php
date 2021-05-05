@@ -242,6 +242,19 @@ class CashierController extends Controller
     $table = Table::find($sale->table_id);
     $table->status = 'available';
     $table->save();
-    return '/cashier';
+    return '/cashier/showReceit/'.$saleId;
   }
+
+  /**
+   * show receipt after payment; redirect from @savePayment()
+   */
+  public function showReceipt($saleId)
+  {
+    $sale = Sale::find($saleId)->first();
+    $saleDetails = SaleDetail::where('sale_id', $saleId)->get();
+    return view('cashier.showReceipt')->with('sale', $sale)->with('saleDetails', $saleDetails);
   }
+
+
+
+}
