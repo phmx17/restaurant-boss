@@ -47,6 +47,7 @@
 
                 @foreach($sales as $sale)
                   <tr class="bg-success text-light"><!-- show sale for a table -->
+                    {{-- <td><button class="btn btn-warning" data-toggle="collapse" data-target="#collapseOne">more..</button></td> --}}
                     <td>{{$countSale++}}</td>
                     <td>{{$sale->id}}</td>
                     <td>{{date('m/d/Y H:i:s', strtotime($sale->updated_at))}}</td>
@@ -54,29 +55,39 @@
                     <td>{{$sale->user_name}}</td>
                     <td>{{$sale->total_price}}</td>
                   </tr>
-                  <tr class="text-secondary"><!-- header for sales details -->
-                    <th></th>
-                    <th>Menu ID</th>
-                    <th>Menu</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total Price</th>
-                  </tr>
-                
-                  @foreach($sale->saleDetails as $saleDetail)
-                  <tr class="text-secondary"><!-- sale details -->
-                    <td ></td>
-                    <td>{{$saleDetail->menu_id}}</td>
-                    <td>{{$saleDetail->menu_name}}</td>
-                    <td>{{$saleDetail->quantity}}</td>
-                    <td>{{$saleDetail->menu_price}}</td>
-                    <td>{{$saleDetail->menu_price * $saleDetail->quantity}}</td>
-                  </tr>
-                  @endforeach
-                  @endforeach
+                  {{-- <div id="collapsOne" class="collapse show"> --}}
+                    <tr class="text-secondary"><!-- header for sales details -->
+                      <th></th>
+                      <th>Menu ID</th>
+                      <th>Menu</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total Price</th>
+                    </tr>
+                  
+                    @foreach($sale->saleDetails as $saleDetail)
+                    <tr class="text-secondary"><!-- sale details -->
+                      <td ></td>
+                      <td>{{$saleDetail->menu_id}}</td>
+                      <td>{{$saleDetail->menu_name}}</td>
+                      <td>{{$saleDetail->quantity}}</td>
+                      <td>{{$saleDetail->menu_price}}</td>
+                      <td>{{$saleDetail->menu_price * $saleDetail->quantity}}</td>
+                    </tr>
+                    @endforeach
+                    
+                  {{-- </div> --}}
+                @endforeach
               </tbody>
             </table>
             {{$sales->appends($_GET)->links()}}
+
+            <!-- export to Excel form and button -->
+            <form action="/report/show/export" method="GET">
+              <input type="hidden" name="dateStart" value="{{$dateStart}}">
+              <input type="hidden" name="dateEnd" value="{{$dateEnd}}">
+              <input type="submit" class="btn btn-warning" value="Export to Excel">
+            </form>
           @else
             <div class="alert alert-danger" role="alert">
                There is no Sales Report

@@ -45,4 +45,5 @@ Route::resource('management/table', 'Management\TableController'); // URI, then 
 // report
 Route::get('/report', 'Report\ReportController@index');
 Route::get('/report/show', 'Report\ReportController@show');
+Route::get('/report/show/export', 'Report\ReportController@export');
 
