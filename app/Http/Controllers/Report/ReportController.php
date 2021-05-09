@@ -23,10 +23,10 @@ class ReportController extends Controller
     
     $dateStart_Ymd = date('Y-m-d:H:i:s', strtotime($request->dateStart . '00:00:00'));  // format for query
     $dateEnd_Ymd = date('Y-m-d:H:i:s', strtotime($request->dateEnd . '23:59:59'));
-    $dateStart_mdY = date('m-d-Y:H:i:s', strtotime($request->dateStart . '00:00:00'));  // format for view
-    $dateEnd_mdY = date('m-d-Y:H:i:s', strtotime($request->dateEnd . '23:59:59'));
+    $dateStart_mdY = date('m/d/Y:H:i:s', strtotime($request->dateStart . '00:00:00'));  // format for view
+    $dateEnd_mdY = date('m/d/Y:H:i:s', strtotime($request->dateEnd . '23:59:59'));
 
-    $sales = Sale::whereBetween('updated_at', [$dateStart_Ymd, $dateEnd_Ymd])->where('sale_status', 'paid')->get();  
+    $sales = Sale::whereBetween('updated_at', [$dateStart_Ymd, $dateEnd_Ymd])->where('sale_status', 'paid');  
 
     return view('report.showReport')
     ->with('dateStart', $dateStart_mdY)

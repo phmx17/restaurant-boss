@@ -228,11 +228,11 @@ class CashierController extends Controller
    */
   public function savePayment(Request $request) 
   {
-    $saleId = $request->sale_id;
+    $saleId = $request->sale_id;   
     $receivedAmount = $request->received_amount;
     $paymentType = $request->payment_type;
     // update Sale record in database
-    $sale = Sale::find($saleId)->first();    
+    $sale = Sale::find($saleId); 
     $sale->total_received = $receivedAmount;
     $sale->total_change = $receivedAmount - $sale->total_price;
     $sale->payment_type = $paymentType;
@@ -250,7 +250,7 @@ class CashierController extends Controller
    */
   public function showReceipt($saleId)
   {
-    $sale = Sale::find($saleId)->first();
+    $sale = Sale::find($saleId);
     $saleDetails = SaleDetail::where('sale_id', $saleId)->get();
     return view('cashier.showReceipt')->with('sale', $sale)->with('saleDetails', $saleDetails);
   }

@@ -16,56 +16,74 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/home">Main Functions</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Report</li>
+            <li class="breadcrumb-item"><a href="/report">Report</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Result</li>
           </ol>
         </nav>
       </div>
     </div>
     <div class="row">
-      <form action="/report/show" method="GET">
         <div class="col-md-12">
-        <label>Choose Date For Report</label>
-          <div class="form-group"><!-- from tempus dominus bootstrap 4 -->
-            <div class="input-group date" id="date-start" data-target-input="nearest">
-                  <input type="text" name="dateStart" class="form-control datetimepicker-input" data-target="#date-start"/>
-                  <div class="input-group-append" data-target="#date-start" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="form-group">
-           <div class="input-group date" id="date-end" data-target-input="nearest">
-                <input type="text" name="dateEnd" class="form-control datetimepicker-input" data-target="#date-end"/>
-                <div class="input-group-append" data-target="#date-end" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                </div>
+          @if($sales->count() > 0)
+            <div class="alert alert-success" role="alert">
+              <p>The Total Amount of Sales from {{$dateStart}} to {{$dateEnd}} is ${{number_format($totalSale, 2)}}</p>
+              <p>Total Result: {{$sales->total()}}</p>
             </div>
-          </div>
-          <input class="btn btn-primary" type="submit" value="Show Report">
-        
+            <table class="table">
+              <thead><!-- main header in blue -->
+                <tr class="bg-primary text-light">
+                  <th scope="col">#</th>
+                  <th scope="col">Receipt ID</th>
+                  <th scope="col">Date Time</th>
+                  <th scope="col">Table</th>
+                  <th scope="col">Staff</th>
+                  <th scope="col">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @php
+                  $countSale = ($sales->currentPage() - 1) * $sales->perPage() + 1
+                @endphp
+
+                @foreach($sales as $sale)
+                  <tr class="bg-success text-light"><!-- show sale for a table -->
+                    <td>{{$countSale++}}</td>
+                    <td>{{$sale->id}}</td>
+                    <td>{{date('m/d/Y H:i:s', strtotime($sale->updated_at))}}</td>
+                    <td>{{$sale->table_name}}</td>
+                    <td>{{$sale->user_name}}</td>
+                    <td>{{$sale->total_price}}</td>
+                  </tr>
+                  <tr class="text-secondary"><!-- header for sales details -->
+                    <th></th>
+                    <th>Menu ID</th>
+                    <th>Menu</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Price</th>
+                  </tr>
+                
+                  @foreach($sale->saleDetails as $saleDetail)
+                  <tr class="text-secondary"><!-- sale details -->
+                    <td ></td>
+                    <td>{{$saleDetail->menu_id}}</td>
+                    <td>{{$saleDetail->menu_name}}</td>
+                    <td>{{$saleDetail->quantity}}</td>
+                    <td>{{$saleDetail->menu_price}}</td>
+                    <td>{{$saleDetail->menu_price * $saleDetail->quantity}}</td>
+                  </tr>
+                  @endforeach
+                  @endforeach
+              </tbody>
+            </table>
+            {{$sales->appends($_GET)->links()}}
+          @else
+            <div class="alert alert-danger" role="alert">
+               There is no Sales Report
+            </div>
+          @endif        
         </div>
       </form>
     </div>
   </div>
-
-  <script type="text/javascript">
-      $(function () {
-          $('#date-start').datetimepicker({
-            format : 'L' // removes time item
-          });
-          $('#date-end').datetimepicker({
-              format : 'L', // removes time item
-              useCurrent: false
-          });
-          $("#date-start").on("change.datetimepicker", function (e) {
-              $('#date-end').datetimepicker('minDate', e.date); // name is dateStart; make required in controller
-          });
-          $("#date-end").on("change.datetimepicker", function (e) {
-              $('#date-start').datetimepicker('maxDate', e.date); // name is dateEnd; make them required in controlled
-          });
-      });
-  </script>
-
-
 @endsection
