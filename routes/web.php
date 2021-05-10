@@ -18,32 +18,48 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');  // this goes to HomeController and executes index()
 
-Route::get('/management', function() {
-  return view('management.index');
+/**
+ * authorization middleware for protected routes; login required
+ **/ 
+Route::middleware(['auth'])->group(function() {
+   
+  // Cashier routes
+  Route::get('/cashier', 'Cashier\CashierController@index');
+  Route::get('/cashier/getMenuByCategory/{category_id}', 'Cashier\CashierController@getMenuByCategory');
+  Route::get('/cashier/getTables', 'Cashier\CashierController@getTables');
+  Route::post('/cashier/orderFood', 'Cashier\CashierController@orderFood');
+  Route::get('/cashier/getSaleDetailsByTable/{table_id}', 'Cashier\CashierController@getSaleDetailsByTable');
+  Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
+  Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
+  Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
+  // sales receipt
+  Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale
 });
 
-// Cashier routes
-Route::get('/cashier', 'Cashier\CashierController@index');
-Route::get('/cashier/getMenuByCategory/{category_id}', 'Cashier\CashierController@getMenuByCategory');
-Route::get('/cashier/getTables', 'Cashier\CashierController@getTables');
-Route::post('/cashier/orderFood', 'Cashier\CashierController@orderFood');
-Route::get('/cashier/getSaleDetailsByTable/{table_id}', 'Cashier\CashierController@getSaleDetailsByTable');
-Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
-Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
-Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
-// sales receipt
-Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale
+/**
+ * authorization middleware for protected routes; restriction to admin only
+ **/ 
+Route::middleware(['auth', 'VerifyAdmin'])->group(function() { 
+  
+  // management index
+    Route::get('/management', function() { 
+      return view('management.index');
+    }); 
+  
+  // resource routes for Management
+  Route::resource('management/category', 'Management\CategoryController'); // URI, then folder where the resource controller lives
+  Route::resource('management/menu', 'Management\MenuController'); // URI, then folder where the resource controller lives
+  Route::resource('management/table', 'Management\TableController'); // URI, then folder where the resource controller lives
+  
+  // report
+  Route::get('/report', 'Report\ReportController@index');
+  Route::get('/report/show', 'Report\ReportController@show');
+  // Excel export
+  Route::get('/report/show/export', 'Report\ReportController@export');
+});
 
-// resource routes for Management
-Route::resource('management/category', 'Management\CategoryController'); // URI, then folder where the resource controller lives
-Route::resource('management/menu', 'Management\MenuController'); // URI, then folder where the resource controller lives
-Route::resource('management/table', 'Management\TableController'); // URI, then folder where the resource controller lives
 
-// report
-Route::get('/report', 'Report\ReportController@index');
-Route::get('/report/show', 'Report\ReportController@show');
-Route::get('/report/show/export', 'Report\ReportController@export');
+
 
