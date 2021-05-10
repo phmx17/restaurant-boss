@@ -15,13 +15,14 @@
                     @endif
 
                     <div class="row text-center">
-
+                      @if(Auth::user()->checkAdmin())
                       <div class="col-sm-4">
                         <a href="/management">
                           <img width="130px" src="{{asset('images/management.svg')}}" alt="management">
                           <h4>Management</h4>
                         </a>
                       </div>
+                      @endif
 
                       <div class="col-sm-4">
                         <a href="/cashier">
@@ -29,13 +30,14 @@
                           <h4>Cashier</h4>
                         </a>
                       </div>
-
+                      @if(Auth::user()->checkAdmin())
                       <div class="col-sm-4">
                         <a href="/report">
                           <img width="130px" src="{{asset('images/report.svg')}}" alt="report">                          
                           <h4>Report</h4>
                         </a>
                       </div>
+                      @endif
                     </div>                    
                 </div>
             </div>
