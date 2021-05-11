@@ -38,7 +38,7 @@ class TableController extends Controller
     public function store(Request $request)
     {
       $request->validate([
-        'name' => 'required|unique:tables|max:17|min:2'
+        'name' => 'required|unique:tables|max:17'
       ]);
       $table = new Table();
       $table->name = $request->name;

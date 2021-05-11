@@ -21,7 +21,7 @@
         @method('PUT')
         <div class="form-group">
           <label for="menuName">Menu Name</label>
-          <input type="text" name="name" id="menuName" class="form-control" value="{{$menu->name}}">        
+          <input type="text" name="name" id="menuName" class="form-control" value="{{old('name', $menu->name)}}">        
         </div>
 
         <label for="menuPrice">Price</label>
@@ -41,7 +41,7 @@
         
         <div class="form-group">
           <label for="description">Description</label>
-          <input type="text" name="description" class="form-control" value="{{$menu->description}}">
+          <input type="text" name="description" class="form-control" value="{{old('description', $menu->description)}}">
         </div>
 
         <div class="form-group">

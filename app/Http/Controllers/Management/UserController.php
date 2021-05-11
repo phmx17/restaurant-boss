@@ -73,7 +73,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+      $user = User::find($id);
+      return view('management/editUser')->with('user',$user);
+
     }
 
     /**
@@ -85,7 +87,38 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $user = User::find($id);
+      // assign here in order for form to not revert selection upon entry errors
+      if($request->user !== $user->role){ // if block not necessary; but for clarity
+        $user->role = $request->role;
+        $user->save();
+      }
+
+      $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255',
+        'password' => 'required|min:8',
+      ]);
+      // prevents entering an existing name that is not the currently assigned one
+      if($request->name !== $user->name) {
+        $request->validate([
+          'name' => 'unique:users'
+        ]);
+      } 
+      // prevents entering an existing email that is not the currently assigned one
+      if($request->email !== $user->email) {
+        $request->validate([
+          'email' => 'unique:users'
+        ]);
+      }
+     
+      $user->name = $request->name;
+      $user->email = $request->email;
+      $user->password = Hash::make($request->password);
+      // $user->role = $request->role;
+      $user->save();
+      $request->session()->flash('status', $user->name . ' was updated successfully');
+      return redirect('/management/user');
     }
 
     /**
@@ -95,7 +128,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    { 
+      $user = User::find($id);
+      Session()->flash('status', $user->name . ' has been deleted');
+      User::destroy($id);
+      return redirect ('/management/user');
     }
 }

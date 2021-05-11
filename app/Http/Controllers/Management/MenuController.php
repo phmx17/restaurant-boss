@@ -41,8 +41,9 @@ class MenuController extends Controller
     {
       
       $validated = $request->validate([
-        'name' => ['bail','required', 'unique:menus', 'max:140'],
+        'name' => ['bail','required', 'unique:menus', 'min:3', 'max:140'],
         'price' => ['required', 'numeric'],
+        'description' => ['required', 'min:3', 'max:140'],
         'category_id' => ['required', 'numeric']
       ]);
       // storing image
@@ -101,8 +102,9 @@ class MenuController extends Controller
     {
       // validation
       $request->validate([
-        'name' => 'required|max:255',
+        'name' => 'required|min:3|max:255',
         'price' => 'required|numeric',
+        'description' => 'required|min:3|max:255',
         'category_id' => 'required|numeric',
       ]);
       // handle image
@@ -143,7 +145,7 @@ class MenuController extends Controller
     public function destroy($id)  // getting Request in order to flash it
     {
       $menu = Menu::find($id);
-      if($menu->image != 'noImage.png') {
+      if($menu->image != 'noimage.png') {
         unlink(public_path('menu_images') . '/' . $menu->image);
       }
       Session()->flash('status', $menu->name . ' was deleted successfully' );

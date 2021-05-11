@@ -20,7 +20,7 @@
         @csrf
         <div class="form-group">
           <label for="tableName">Table Name</label>
-          <input type="text" name="name" id="tableName" class="form-control @error('name') @enderror" placeholder="table...">
+          <input type="text" name="name" id="tableName" class="form-control @error('name') @enderror" placeholder="table..." value="{{old('name')}}">
           @error('name')
             <div class="alert alert-danger">{{ $message }}</div>
           @enderror

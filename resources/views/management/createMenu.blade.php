@@ -20,7 +20,7 @@
         @csrf
         <div class="form-group">
           <label for="menuName">Menu Name</label>
-          <input type="text" name="name" id="menuName" class="form-control" placeholder="name...">        
+          <input type="text" name="name" id="menuName" class="form-control" placeholder="name..." value="{{old('name')}}">        
         </div>
 
         <label for="menuPrice">Price</label>
@@ -41,7 +41,7 @@
         
         <div class="form-group">
           <label for="description">Description</label>
-          <input type="text" name="description" class="form-control" placeholder="description...">
+          <input type="text" name="description" class="form-control" placeholder="description..." value="{{old('description')}}">
         </div>
 
         <div class="form-group">
