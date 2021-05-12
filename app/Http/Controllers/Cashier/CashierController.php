@@ -158,7 +158,7 @@ class CashierController extends Controller
       <tr>
         <td>'.$saleDetail->menu_id.'</td>
         <td>'.$saleDetail->menu_name.'</td>
-        <td>'.$saleDetail->quantity.'<button class="btn btn-primary btn-sm ml-3 btn-increase-quantity" data-id="'.$saleDetail->id.'">+</button></td>
+        <td>'.$saleDetail->quantity.'<button class="btn btn-primary btn-sm ml-2 btn-increase-quantity" data-id="'.$saleDetail->id.'">+</button><button class="btn btn-primary btn-sm ml-2 btn-decrease-quantity" data-id="'.$saleDetail->id.'">-</button></td>
         <td>'.$saleDetail->menu_price.'</td>
         <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
         if($saleDetail->status == 'Not Confirmed') { 
@@ -202,26 +202,34 @@ class CashierController extends Controller
   }
 
     /**
-   * increase quantity of item in order; ajax 
+   * adjust quantity of item in order; 
+   * ajax; 
+   * param 'action' determines increase or decrease;
    */
 
-  public function increaseQuantity(Request $request)
-  {
+  public function adjustQuantity(Request $request)
+  {    
     $saleDetail_id = $request->saleDetail_id;
     $saleDetail = SaleDetail::find($saleDetail_id); 
-    $saleDetail->quantity += 1; // update quantity col
-    $saleDetail->save();
+    if($request->action == 'increase') {
+      $saleDetail->quantity += 1; // increase by 1
+    } else if($request->action == 'reduce') {
+      $saleDetail->quantity -= 1; // reduce by 1
+    }
+    $saleDetail->save();  // save the sale details
     error_log($saleDetail->menu_name .' quantity: '. $saleDetail->quantity .' menu price: '. $saleDetail->menu_price);
     
     // update the total amount in the sales table
     $sale = Sale::find($saleDetail->sale_id);
-    $sale->total_price = $sale->total_price + $saleDetail->menu_price;
-    $sale->save();
-    dd($sale->total_price);
+    if($request->action == 'increase') {
+      $sale->total_price = $sale->total_price + $saleDetail->menu_price;// increase by 1
+    } else if($request->action == 'reduce') {
+      $sale->total_price = $sale->total_price - $saleDetail->menu_price; // reduce by 1
+    }    
+    $sale->save();  // save the sale
+    // dd($sale->total_price);
     $html = $this->getSaleDetails($saleDetail->sale_id);  // create the client markup for sale details
     return $html;
-
-
   }
 
 

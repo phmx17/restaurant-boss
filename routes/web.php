@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function() {
   Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
   Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
   Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
-  Route::post('/cashier/increase-quantity', 'Cashier\CashierController@increaseQuantity'); // ajax
+  Route::post('/cashier/adjust-quantity', 'Cashier\CashierController@adjustQuantity'); // ajax
 
   // sales receipt
   Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale

@@ -166,14 +166,32 @@
           type: 'POST',
           data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'saleDetail_id': saleDetailId
+            'saleDetail_id': saleDetailId,
+            'action': 'increase'
           },
-          url: '/cashier/increase-quantity',
+          url: '/cashier/adjust-quantity',
           success: (data) => {
             $('#order-details').html(data);  // html is returned from controller
           }
         })  
       })
+    // decrease quantity button
+    $('#order-details').on('click', '.btn-decrease-quantity', function() {        
+        const saleDetailId = $(this).data('id');  // .data() is data from an <a> tag <a data-id="'.$value.'"></a>
+        $.ajax({
+          type: 'POST',
+          data: {
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'saleDetail_id': saleDetailId,
+            'action': 'reduce'
+          },
+          url: '/cashier/adjust-quantity',
+          success: (data) => {
+            $('#order-details').html(data);  // html is returned from controller
+          }
+        })  
+      })
+
       // user clicks on 'Make Payment' button (not in modal!)
       $('#order-details').on('click', '.btn-payment', function(){
         // const totalAmount = $(this).data('totalAmount');
