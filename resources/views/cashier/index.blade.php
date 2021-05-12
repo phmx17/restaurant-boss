@@ -143,7 +143,7 @@
        })      
     })    
 
-    // delete sale details of menu item upon click of trash icon
+    // delete sale details of menu item -> trash icon
       $('#order-details').on('click', '.btn-delete-saleDetail', function() {        
         const saleDetailId = $(this).data('id');  // .data() is data from an <a> tag <a data-id="'.$value.'"></a>
         $.ajax({
@@ -159,6 +159,21 @@
         })  
       })
 
+    // increase quantity button
+    $('#order-details').on('click', '.btn-increase-quantity', function() {        
+        const saleDetailId = $(this).data('id');  // .data() is data from an <a> tag <a data-id="'.$value.'"></a>
+        $.ajax({
+          type: 'POST',
+          data: {
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'saleDetail_id': saleDetailId
+          },
+          url: '/cashier/increase-quantity',
+          success: (data) => {
+            $('#order-details').html(data);  // html is returned from controller
+          }
+        })  
+      })
       // user clicks on 'Make Payment' button (not in modal!)
       $('#order-details').on('click', '.btn-payment', function(){
         // const totalAmount = $(this).data('totalAmount');

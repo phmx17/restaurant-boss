@@ -66,6 +66,9 @@ class CashierController extends Controller
       return $html;    
   }
 
+  /**
+   * place food order
+   */
   public function orderFood(Request $request)
   {
     $menu = Menu::find($request->menu_id);
@@ -103,11 +106,13 @@ class CashierController extends Controller
     $sale->total_price = $sale->total_price + ($request->quantity * $menu->price);
     $sale->save();
     
-    $html = $this->getSaleDetails($sale_id);
-    return $html; // call function for markup creation
+    $html = $this->getSaleDetails($sale_id);  // call function for markup creation
+    return $html; 
   }
 
-  // controller for returning sale details to selected table
+  /**
+   * controller for returning sale details to selected table
+   */  
   public function getSaleDetailsByTable($table_id)
   {
     $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
@@ -120,6 +125,7 @@ class CashierController extends Controller
     }
     return $html;
   }
+
   /**
    * create markup for sale details
    */
@@ -152,7 +158,7 @@ class CashierController extends Controller
       <tr>
         <td>'.$saleDetail->menu_id.'</td>
         <td>'.$saleDetail->menu_name.'</td>
-        <td>'.$saleDetail->quantity.'</td>
+        <td>'.$saleDetail->quantity.'<button class="btn btn-primary btn-sm ml-3 btn-increase-quantity" data-id="'.$saleDetail->id.'">+</button></td>
         <td>'.$saleDetail->menu_price.'</td>
         <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
         if($saleDetail->status == 'Not Confirmed') { 
@@ -194,6 +200,38 @@ class CashierController extends Controller
     $html = $this->getSaleDetails($sale_id);  // create sale details markup
     return $html;
   }
+
+    /**
+   * increase quantity of item in order; ajax 
+   */
+
+  public function increaseQuantity(Request $request)
+  {
+    $saleDetail_id = $request->saleDetail_id;
+    $saleDetail = SaleDetail::find($saleDetail_id); 
+    $saleDetail->quantity += 1; // update quantity col
+    $saleDetail->save();
+    error_log($saleDetail->menu_name .' quantity: '. $saleDetail->quantity .' menu price: '. $saleDetail->menu_price);
+    
+    // update the total amount in the sales table
+    $sale = Sale::find($saleDetail->sale_id);
+    $sale->total_price = $sale->total_price + $saleDetail->menu_price;
+    $sale->save();
+    dd($sale->total_price);
+    $html = $this->getSaleDetails($saleDetail->sale_id);  // create the client markup for sale details
+    return $html;
+
+
+  }
+
+
+
+
+
+
+
+
+
 
   /**
    * delete sale detail of a trashed menu item from sale details

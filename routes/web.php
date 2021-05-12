@@ -13,11 +13,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
-Auth::routes();
+// Auth::routes();
+Auth::routes(['register' => false, 'reset' => false]); // remove the register tab as well as 'forgot password' link
 Route::get('/home', 'HomeController@index')->name('home');  // this goes to HomeController and executes index()
 
 /**
@@ -34,6 +33,8 @@ Route::middleware(['auth'])->group(function() {
   Route::post('/cashier/confirmOrderStatus', 'Cashier\CashierController@confirmOrderStatus');
   Route::post('/cashier/deleteSaleDetail', 'Cashier\CashierController@deleteSaleDetail'); // ajax
   Route::post('/cashier/savePayment', 'Cashier\CashierController@savePayment'); // ajax
+  Route::post('/cashier/increase-quantity', 'Cashier\CashierController@increaseQuantity'); // ajax
+
   // sales receipt
   Route::get('/cashier/showReceit/{saleId}', 'Cashier\CashierController@showReceipt'); // redirect after payment of sale
 });
