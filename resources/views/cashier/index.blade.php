@@ -175,6 +175,7 @@
           }
         })  
       })
+      
     // decrease quantity button
     $('#order-details').on('click', '.btn-decrease-quantity', function() {        
         const saleDetailId = $(this).data('id');  // .data() is data from an <a> tag <a data-id="'.$value.'"></a>

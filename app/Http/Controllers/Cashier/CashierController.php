@@ -206,24 +206,28 @@ class CashierController extends Controller
    * ajax; 
    * param 'action' determines increase or decrease;
    */
-
   public function adjustQuantity(Request $request)
-  {    
+  { 
+    $skipDecrease = false;  // flag to insure sale->total_price does not subtract after saleDetail->quantity is back to zero (after cashier decreasing quantity)
     $saleDetail_id = $request->saleDetail_id;
     $saleDetail = SaleDetail::find($saleDetail_id); 
     if($request->action == 'increase') {
       $saleDetail->quantity += 1; // increase by 1
     } else if($request->action == 'reduce') {
       $saleDetail->quantity -= 1; // reduce by 1
+      if($saleDetail->quantity < 0){ // should not be less than zero
+        $saleDetail->quantity += 1; // if so remove reduction
+        $skipDecrease = true; // set flag to skip this call for sale->total_price reduce operation
+      }
     }
     $saleDetail->save();  // save the sale details
     error_log($saleDetail->menu_name .' quantity: '. $saleDetail->quantity .' menu price: '. $saleDetail->menu_price);
     
-    // update the total amount in the sales table
+    // update the total amount in the sales table; sale->total_price
     $sale = Sale::find($saleDetail->sale_id);
     if($request->action == 'increase') {
       $sale->total_price = $sale->total_price + $saleDetail->menu_price;// increase by 1
-    } else if($request->action == 'reduce') {
+    } else if($request->action == 'reduce' && $skipDecrease != true) {  // flag from above
       $sale->total_price = $sale->total_price - $saleDetail->menu_price; // reduce by 1
     }    
     $sale->save();  // save the sale
